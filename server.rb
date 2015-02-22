@@ -8,7 +8,6 @@ class RPS < Sinatra::Base
   enable :sessions
 
   game = Game.new
-  computer = Computer.new
 
   get '/' do
     game.players = []
@@ -27,6 +26,11 @@ class RPS < Sinatra::Base
         session[:player_two] = @player
       end
       game.add_player(@player)
+
+      while game.players.count < 2 do
+        "Waiting for the other player to connect"
+      end
+
       erb :game
     end
   end

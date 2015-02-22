@@ -20,6 +20,16 @@ img {
   padding: 20px;
 }
 
+#waiting {
+  font-style: italic;
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+#subtitle {
+  font-family: Open Sans, sans-serif;
+}
+
 /***************
 HEADER
 ***************/
