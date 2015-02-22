@@ -11,6 +11,7 @@ class RPS < Sinatra::Base
   computer = Computer.new
 
   get '/' do
+    game.players = []
     erb :index
   end
 
@@ -61,8 +62,16 @@ class RPS < Sinatra::Base
   end
 
   get '/game' do
-    @player = game.players[1]
-    @computer = game.players[0]
+    game.players[0].weapon = nil
+    game.players[1].weapon = nil
+
+    if session[:player_one]
+      @player = game.players[0]
+      @opponent = game.players[1]
+    elsif session[:player_two]
+      @player = game.players[1]
+      @opponent = game.players[0]
+    end
     erb :game
   end
 

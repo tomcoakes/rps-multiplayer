@@ -22,10 +22,10 @@
 <section>
 <% if session[:player_one] %>
   <h2>You chose: <%= @p1_weapon %></h2>
-  <h2>The other player chose: <%= @opponents_weapon %></h2>
+  <h2><%= @opponent.name %> chose: <%= @opponents_weapon %></h2>
 <% elsif session[:player_two] %>
   <h2>You chose: <%= @p2_weapon %></h2>
-  <h2>The other player chose: <%= @opponents_weapon %></h2>
+  <h2><%= @opponent.name %> chose: <%= @opponents_weapon %></h2>
 <% end %>
 
 <a href="/game">Click to play again</a>
