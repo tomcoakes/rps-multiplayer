@@ -1,18 +1,33 @@
 <header>
-
-<% if @winner == @player %>
-  <h1>You won!</h1>
-<% elsif @winner == @computer %>
-  <h1>You lost!</h1>
-<% else %>
-  <h1>It's a draw.</h1>
+<% if session[:player_one] %>
+  <% if @winner == @player %>
+    <h1>You won!</h1>
+  <% elsif @winner == @opponent %>
+    <h1>You lost!</h1>
+  <% else %>
+    <h1>It's a draw.</h1>
+  <% end %>
+<% elsif session[:player_two] %>
+  <% if @winner == @player %>
+    <h1>You won!</h1>
+  <% elsif @winner == @opponent %>
+    <h1>You lost!</h1>
+  <% else %>
+    <h1>It's a draw.</h1>
+  <% end %>
 <% end %>
 
 </header>
 
 <section>
-<h2>You chose: <%= @selected_weapon %></h2>
-<h2>The computer chose: <%= @computer_weapon %></h2>
+<% if session[:player_one] %>
+  <h2>You chose: <%= @p1_weapon %></h2>
+  <h2>The other player chose: <%= @opponents_weapon %></h2>
+<% elsif session[:player_two] %>
+  <h2>You chose: <%= @p2_weapon %></h2>
+  <h2>The other player chose: <%= @opponents_weapon %></h2>
+<% end %>
+
 <a href="/game">Click to play again</a>
 </section>
 

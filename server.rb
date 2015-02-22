@@ -19,23 +19,45 @@ class RPS < Sinatra::Base
     if name.empty?
       erb :index
     else
-      game.players = []
       @player = Player.new(name)
-      game.add_player(computer)
+      if game.players.empty?
+        session[:player_one] = @player
+      else
+        session[:player_two] = @player
+      end
       game.add_player(@player)
       erb :game
     end
   end
 
   get '/outcome' do
-    game.players[1].weapon = params[:weapon].to_sym
-    game.players[0].choose_weapon
-    @computer_weapon = game.players[0].weapon
-    @selected_weapon = game.players[1].weapon
-    @player = game.players[1]
-    @computer = game.players[0]
+    if session[:player_one]
+      game.players[0].weapon = params[:weapon].to_sym
+      session[:player_one].weapon = game.players[0].weapon
+      @p1_weapon = session[:player_one].weapon
+    elsif session[:player_two]
+      game.players[1].weapon = params[:weapon].to_sym
+      session[:player_two].weapon = game.players[1].weapon
+      @p2_weapon = session[:player_two].weapon
+    end
+
+    while game.players[0].weapon == nil || game.players[1].weapon == nil do
+      "Waiting for the other player to take their turn"
+    end
+
+    if session[:player_one]
+      @player = game.players[0]
+      @opponent = game.players[1]
+      @opponents_weapon = game.players[1].weapon
+    elsif session[:player_two]
+      @player = game.players[1]
+      @opponent = game.players[0]
+      @opponents_weapon = game.players[0].weapon
+    end
+    
     @winner = game.winner
-    erb :outcome
+
+      erb :outcome
   end
 
   get '/game' do

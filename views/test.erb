@@ -1,0 +1,7 @@
+<% if session[:player_one] %>
+  <p>You chose <%= @p1_weapon %></p>
+  <p>Your opponent chose <%= @opponents_weapon %></p>
+  <% else %>
+    <p>You chose <%= @p2_weapon %></p>
+    <p>Your opponent chose <%= @opponents_weapon %></p>
+  <% end %>
