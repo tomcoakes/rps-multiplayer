@@ -15,7 +15,6 @@ class RPS < Sinatra::Base
   end
 
   get '/singleplayer_register' do
-    GAME.players = []
     erb :singleplayer_index
   end
 
@@ -29,32 +28,39 @@ class RPS < Sinatra::Base
 # SINGLEPLAYER ONLY
 
   post '/singleplayer_game' do
+    session[:game] = GAME
     name = params[:name]
     if name.empty?
       erb :singleplayer_index
     else
-      GAME.players = []
+      session[:game].players = []
       @player = Player.new(name)
-      GAME.add_player(COMPUTER)
-      GAME.add_player(@player)
+      session[:game].add_player(COMPUTER)
+      session[:game].add_player(@player)
       session[:me] = @player.object_id
       erb :singleplayer_game
     end
   end
 
   get '/singleplayer_outcome' do
-    @player = GAME.players.select { |player| player.object_id == session[:me] }.first
-    @computer = GAME.players.select { |player| player.object_id != session[:me] }.first
+    @player = session[:game].players[1]
+    @computer = session[:game].players[0]
     @player.weapon = params[:weapon].to_sym
     @computer.choose_weapon
     erb :singleplayer_outcome
   end
 
   get '/singleplayer_game' do
-    @player = GAME.players.select { |player| player.object_id == session[:me] }.first
-    @computer = GAME.players.select { |player| player.object_id != session[:me] }.first
+    @player = session[:game].players[1]
+    @computer = session[:game].players[0]    
     erb :singleplayer_game
   end
+
+
+
+
+
+
 
 
 # MULTIPLAYER ONLY
