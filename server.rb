@@ -37,13 +37,13 @@ class RPS < Sinatra::Base
       @player = Player.new(name)
       session[:game].add_player(COMPUTER)
       session[:game].add_player(@player)
-      session[:me] = @player.object_id
+      session[:me] = @player
       erb :singleplayer_game
     end
   end
 
   get '/singleplayer_outcome' do
-    @player = session[:game].players[1]
+    @player = session[:me]
     @computer = session[:game].players[0]
     @player.weapon = params[:weapon].to_sym
     @computer.choose_weapon
@@ -51,7 +51,7 @@ class RPS < Sinatra::Base
   end
 
   get '/singleplayer_game' do
-    @player = session[:game].players[1]
+    @player = session[:me]
     @computer = session[:game].players[0]    
     erb :singleplayer_game
   end
