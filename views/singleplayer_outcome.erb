@@ -1,8 +1,8 @@
 <header>
 
-<% if @winner == @player %>
+<% if GAME.winner == @player %>
   <h1>You won!</h1>
-<% elsif @winner == @computer %>
+<% elsif GAME.winner == @computer %>
   <h1>You lost!</h1>
 <% else %>
   <h1>It's a draw.</h1>

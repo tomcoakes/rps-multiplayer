@@ -47,13 +47,12 @@ class RPS < Sinatra::Base
     @computer = GAME.players.select { |player| player.object_id != session[:me] }.first
     @player.weapon = params[:weapon].to_sym
     @computer.choose_weapon
-    @winner = GAME.winner
     erb :singleplayer_outcome
   end
 
   get '/singleplayer_game' do
-    @player = GAME.players[1]
-    @computer = GAME.players[0]
+    @player = GAME.players.select { |player| player.object_id == session[:me] }.first
+    @computer = GAME.players.select { |player| player.object_id != session[:me] }.first
     erb :singleplayer_game
   end
 
