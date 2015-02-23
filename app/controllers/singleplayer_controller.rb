@@ -7,18 +7,22 @@ class RPS < Sinatra::Base
   end
 
   post '/singleplayer_game' do
-    session[:game] = Game.new
-    COMPUTER = Computer.new
     name = params[:name]
-    @player = Player.new(name)
-    session[:game].add_player(COMPUTER)
-    session[:game].add_player(@player)
-    session[:me] = @player
-    erb :singleplayer_game
+    if name.empty?
+      erb :singleplayer_index 
+    else
+      session[:game] = Game.new
+      computer = Computer.new
+      @player = Player.new(name)
+      session[:game].add_player(computer)
+      session[:game].add_player(@player)
+      session[:me] = @player
+      erb :singleplayer_game
+    end
   end
 
   get '/singleplayer_outcome' do
-    @computer = session[:game].players[0]
+    @computer = session[:game].players.select { |player| player.object_id != session[:me] }.first
     @player.weapon = params[:weapon].to_sym
     @computer.choose_weapon
     @winner = session[:game].winner

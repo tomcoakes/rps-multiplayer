@@ -5,11 +5,13 @@ Feature: Starting a game
 
 	Scenario: Registering my name
 		Given I am on the homepage
+    When I click "Play Against The Computer"
 		When I enter "Tom"
     And I press "submit"
 		Then I should see "What's your weapon of choice, Tom?"
 
 	Scenario: Press the submit button without entering a name
 		Given I am on the homepage
+    When I click "Play Against The Computer"
     When I press "submit"
     Then I should see "To play, enter your name."
