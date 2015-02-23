@@ -65,4 +65,5 @@ DEPENDENCIES
   cucumber
   cucumber-sinatra
   rspec
+  rspec-mocks
   sinatra

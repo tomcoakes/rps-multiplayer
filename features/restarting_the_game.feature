@@ -5,6 +5,7 @@ Feature: The player can start another game
 
   Background:
     Given I am on the homepage
+    And I click "Play Against The Computer"
     And I enter "Tom"
     And I press "submit"
     And I click "Rock"

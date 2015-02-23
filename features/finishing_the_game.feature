@@ -5,6 +5,7 @@ Feature: The game has an end
 
   Background:
     Given I am on the homepage
+    When I click "Play Against The Computer"
     And I enter "Tom"
     And I press "submit"
 

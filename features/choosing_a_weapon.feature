@@ -5,6 +5,7 @@ Feature: Choosing a weapon
 
 	Background:
 		Given I am on the homepage
+    When I click "Play Against The Computer"
 		When I enter "Tom"
   	And I press "submit"
 		Then I should see "What's your weapon of choice, Tom?"
