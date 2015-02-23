@@ -1,0 +1,21 @@
+<header>
+
+<% if @winner == @player %>
+  <h1>You won!</h1>
+<% elsif @winner == @computer %>
+  <h1>You lost!</h1>
+<% else %>
+  <h1>It's a draw.</h1>
+<% end %>
+
+</header>
+
+<section>
+<h2>You chose: <%= @selected_weapon %></h2>
+<h2>The computer chose: <%= @computer_weapon %></h2>
+<a href="/singleplayer_game">Click to play again</a>
+</section>
+
+<footer>
+<a href="https://github.com/tomcoakes/rps-challenge">Check out my source code on GitHub!</a>
+</footer>

@@ -8,13 +8,60 @@ class RPS < Sinatra::Base
   enable :sessions
 
   game = Game.new
+  computer = Computer.new
 
   get '/' do
-    game.players = []
     erb :index
   end
 
-  post '/game' do
+  get '/singleplayer_register' do
+    game.players = []
+    erb :singleplayer_index
+  end
+
+  get '/multiplayer_register' do
+    game.players = []
+    erb :multiplayer_index
+  end
+
+
+
+# SINGLEPLAYER ONLY
+
+post '/singleplayer_game' do
+    name = params[:name]
+    if name.empty?
+      erb :index
+    else
+      game.players = []
+      @player = Player.new(name)
+      game.add_player(computer)
+      game.add_player(@player)
+      erb :singleplayer_game
+    end
+  end
+
+  get '/singleplayer_outcome' do
+    game.players[1].weapon = params[:weapon].to_sym
+    game.players[0].choose_weapon
+    @computer_weapon = game.players[0].weapon
+    @selected_weapon = game.players[1].weapon
+    @player = game.players[1]
+    @computer = game.players[0]
+    @winner = game.winner
+    erb :singleplayer_outcome
+  end
+
+  get '/singleplayer_game' do
+    @player = game.players[1]
+    @computer = game.players[0]
+    erb :singleplayer_game
+  end
+
+
+# MULTIPLAYER ONLY
+
+  post '/multiplayer_game' do
     name = params[:name]
     if name.empty?
       erb :index
@@ -31,11 +78,11 @@ class RPS < Sinatra::Base
         "Waiting for the other player to connect"
       end
 
-      erb :game
+      erb :multiplayer_game
     end
   end
 
-  get '/outcome' do
+  get '/multiplayer_outcome' do
     if session[:player_one]
       game.players[0].weapon = params[:weapon].to_sym
       session[:player_one].weapon = game.players[0].weapon
@@ -62,10 +109,10 @@ class RPS < Sinatra::Base
     
     @winner = game.winner
 
-      erb :outcome
+      erb :multiplayer_outcome
   end
 
-  get '/game' do
+  get '/multiplayer_game' do
     game.players[0].weapon = nil
     game.players[1].weapon = nil
 
@@ -76,7 +123,7 @@ class RPS < Sinatra::Base
       @player = game.players[1]
       @opponent = game.players[0]
     end
-    erb :game
+    erb :multiplayer_game
   end
 
   run! if app_file == $0
