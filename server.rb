@@ -67,11 +67,7 @@ post '/singleplayer_game' do
       erb :index
     else
       @player = Player.new(name)
-      if game.players.empty?
-        session[:player_one] = @player
-      else
-        session[:player_two] = @player
-      end
+      game.players.empty? ? session[:player_one] = @player : session[:player_two] = @player
       game.add_player(@player)
 
       while game.players.count < 2 do
