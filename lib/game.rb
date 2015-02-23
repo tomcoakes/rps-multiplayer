@@ -1,7 +1,5 @@
 class Game
   
-  attr_accessor :players
-
   def add_player(player)
     players << player
   end
