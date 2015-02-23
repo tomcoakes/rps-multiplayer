@@ -10,6 +10,10 @@ class Game
     @players ||= []
   end
 
+  def reset_game
+    @players = []
+  end
+
   def winner
     case
     when @players[0].weapon == :Scissors && @players[1].weapon == :Rock

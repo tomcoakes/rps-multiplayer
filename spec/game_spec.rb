@@ -33,4 +33,11 @@ describe Game do
     expect(game.winner).to eq nil
   end
 
+  it "can remove all players to reset the game" do
+    game.add_player(computer)
+    game.add_player(player)
+    game.reset_game
+    expect(game.players).to eq []
+  end
+
 end

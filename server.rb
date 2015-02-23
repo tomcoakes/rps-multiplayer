@@ -19,6 +19,8 @@ class RPS < Sinatra::Base
   end
 
   get '/multiplayer_register' do
+    GAME = Game.new
+    GAME.reset_game
     erb :multiplayer_index
   end
 

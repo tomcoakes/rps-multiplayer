@@ -2,7 +2,7 @@ class RPS < Sinatra::Base
   
   enable :sessions
 
-  GAME = Game.new
+
 
   post '/multiplayer_game' do
     name = params[:name]
