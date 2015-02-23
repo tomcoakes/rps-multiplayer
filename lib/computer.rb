@@ -1,6 +1,6 @@
 class Computer
 
-attr_accessor :weapon
+attr_reader :weapon
 
 def choose_weapon
   @weapon = [:Rock, :Paper, :Scissors].sample

@@ -7,20 +7,20 @@ class RPS < Sinatra::Base
   
   enable :sessions
 
-  game = Game.new
-  computer = Computer.new
+  GAME = Game.new
+  COMPUTER = Computer.new
 
   get '/' do
     erb :index
   end
 
   get '/singleplayer_register' do
-    game.players = []
+    GAME.players = []
     erb :singleplayer_index
   end
 
   get '/multiplayer_register' do
-    game.players = []
+    GAME.players = []
     erb :multiplayer_index
   end
 
@@ -28,33 +28,32 @@ class RPS < Sinatra::Base
 
 # SINGLEPLAYER ONLY
 
-post '/singleplayer_game' do
+  post '/singleplayer_game' do
     name = params[:name]
     if name.empty?
-      erb :index
+      erb :singleplayer_index
     else
-      game.players = []
+      GAME.players = []
       @player = Player.new(name)
-      game.add_player(computer)
-      game.add_player(@player)
+      GAME.add_player(COMPUTER)
+      GAME.add_player(@player)
+      session[:me] = @player.object_id
       erb :singleplayer_game
     end
   end
 
   get '/singleplayer_outcome' do
-    game.players[1].weapon = params[:weapon].to_sym
-    game.players[0].choose_weapon
-    @computer_weapon = game.players[0].weapon
-    @selected_weapon = game.players[1].weapon
-    @player = game.players[1]
-    @computer = game.players[0]
-    @winner = game.winner
+    @player = GAME.players.select { |player| player.object_id == session[:me] }.first
+    @computer = GAME.players.select { |player| player.object_id != session[:me] }.first
+    @player.weapon = params[:weapon].to_sym
+    @computer.choose_weapon
+    @winner = GAME.winner
     erb :singleplayer_outcome
   end
 
   get '/singleplayer_game' do
-    @player = game.players[1]
-    @computer = game.players[0]
+    @player = GAME.players[1]
+    @computer = GAME.players[0]
     erb :singleplayer_game
   end
 
@@ -64,13 +63,13 @@ post '/singleplayer_game' do
   post '/multiplayer_game' do
     name = params[:name]
     if name.empty?
-      erb :index
+      erb :multiplayer_index
     else
       @player = Player.new(name)
-      game.players.empty? ? session[:player_one] = @player : session[:player_two] = @player
-      game.add_player(@player)
+      GAME.players.empty? ? session[:player_one] = @player : session[:player_two] = @player
+      GAME.add_player(@player)
 
-      while game.players.count < 2 do
+      while GAME.players.count < 2 do
         "Waiting for the other player to connect"
       end
 
@@ -80,44 +79,44 @@ post '/singleplayer_game' do
 
   get '/multiplayer_outcome' do
     if session[:player_one]
-      game.players[0].weapon = params[:weapon].to_sym
-      session[:player_one].weapon = game.players[0].weapon
+      GAME.players[0].weapon = params[:weapon].to_sym
+      session[:player_one].weapon = GAME.players[0].weapon
       @p1_weapon = session[:player_one].weapon
     elsif session[:player_two]
-      game.players[1].weapon = params[:weapon].to_sym
-      session[:player_two].weapon = game.players[1].weapon
+      GAME.players[1].weapon = params[:weapon].to_sym
+      session[:player_two].weapon = GAME.players[1].weapon
       @p2_weapon = session[:player_two].weapon
     end
 
-    while game.players[0].weapon == nil || game.players[1].weapon == nil do
+    while GAME.players[0].weapon == nil || GAME.players[1].weapon == nil do
       "Waiting for the other player to take their turn"
     end
 
     if session[:player_one]
-      @player = game.players[0]
-      @opponent = game.players[1]
-      @opponents_weapon = game.players[1].weapon
+      @player = GAME.players[0]
+      @opponent = GAME.players[1]
+      @opponents_weapon = GAME.players[1].weapon
     elsif session[:player_two]
-      @player = game.players[1]
-      @opponent = game.players[0]
-      @opponents_weapon = game.players[0].weapon
+      @player = GAME.players[1]
+      @opponent = GAME.players[0]
+      @opponents_weapon = GAME.players[0].weapon
     end
     
-    @winner = game.winner
+    @winner = GAME.winner
 
       erb :multiplayer_outcome
   end
 
   get '/multiplayer_game' do
-    game.players[0].weapon = nil
-    game.players[1].weapon = nil
+    GAME.players[0].weapon = nil
+    GAME.players[1].weapon = nil
 
     if session[:player_one]
-      @player = game.players[0]
-      @opponent = game.players[1]
+      @player = GAME.players[0]
+      @opponent = GAME.players[1]
     elsif session[:player_two]
-      @player = game.players[1]
-      @opponent = game.players[0]
+      @player = GAME.players[1]
+      @opponent = GAME.players[0]
     end
     erb :multiplayer_game
   end
