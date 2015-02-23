@@ -1,5 +1,5 @@
 class RPS < Sinatra::Base
-  set :public_folder, '../../public'
+  
   enable :sessions
 
   before do
