@@ -2,9 +2,11 @@ require 'sinatra/base'
 require_relative './lib/game'
 require_relative './lib/computer'
 require_relative './lib/player'
+require_relative './app/controllers/singleplayer_controller'
 
 class RPS < Sinatra::Base
-  
+  set :views, File.dirname(__FILE__) + '/app/views'
+  set :public_folder, File.dirname(__FILE__) + '/public'
   enable :sessions
 
   get '/' do
@@ -19,40 +21,6 @@ class RPS < Sinatra::Base
     GAME.players = []
     erb :multiplayer_index
   end
-
-
-
-# SINGLEPLAYER ONLY
-
-  post '/singleplayer_game' do
-    session[:game] = Game.new
-    COMPUTER = Computer.new
-    name = params[:name]
-    session[:game].players = []
-    @player = Player.new(name)
-    session[:game].add_player(COMPUTER)
-    session[:game].add_player(@player)
-    session[:me] = @player
-    erb :singleplayer_game
-  end
-
-  get '/singleplayer_outcome' do
-    @player = session[:me]
-    @computer = session[:game].players[0]
-    @player.weapon = params[:weapon].to_sym
-    @computer.choose_weapon
-    erb :singleplayer_outcome
-  end
-
-  get '/singleplayer_game' do
-    @player = session[:me]
-    @computer = session[:game].players[0]    
-    erb :singleplayer_game
-  end
-
-
-
-
 
 
 
