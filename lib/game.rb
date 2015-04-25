@@ -1,4 +1,6 @@
 class Game
+
+  BEATEN_BY = {Scissors: :Paper, Rock: :Scissors, Paper: :Rock}
   
   def add_player(player)
     players << player
@@ -13,21 +15,12 @@ class Game
   end
 
   def winner
-    case
-    when @players[0].weapon == :Scissors && @players[1].weapon == :Rock
-      return @players[1]
-    when @players[0].weapon == :Paper && @players[1].weapon == :Rock
-      return @players[0]
-    when @players[0].weapon == :Scissors && @players[1].weapon == :Paper
-      return @players[0]
-    when @players[0].weapon == :Paper && @players[1].weapon == :Scissors
-      return @players[1]
-    when @players[0].weapon == :Rock && @players[1].weapon == :Paper
-      return @players[1]
-    when @players[0].weapon == :Rock && @players[1].weapon == :Scissors
-      return @players[0]
-    when @players[0].weapon == @players[1].weapon
+    if @players[0].weapon == @players[1].weapon
       return nil
+    elsif @players[0].weapon == BEATEN_BY[@players[1].weapon]
+      return @players[1]
+    else
+      return @players[0]
     end
   end
 
