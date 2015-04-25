@@ -2,8 +2,6 @@ class RPS < Sinatra::Base
   
   enable :sessions
 
-
-
   post '/multiplayer_game' do
     name = params[:name]
     if name.empty?
@@ -23,13 +21,9 @@ class RPS < Sinatra::Base
 
   get '/multiplayer_outcome' do
     if session[:player_one]
-      GAME.players[0].weapon = params[:weapon].to_sym
-      session[:player_one].weapon = GAME.players[0].weapon
-      @p1_weapon = session[:player_one].weapon
+      assign_weapon_to_player_one
     elsif session[:player_two]
-      GAME.players[1].weapon = params[:weapon].to_sym
-      session[:player_two].weapon = GAME.players[1].weapon
-      @p2_weapon = session[:player_two].weapon
+      assign_weapon_to_player_two
     end
 
     while GAME.players[0].weapon == nil || GAME.players[1].weapon == nil do
@@ -64,5 +58,15 @@ class RPS < Sinatra::Base
     end
     erb :multiplayer_game
   end
+
+  def assign_weapon_to_player_one
+    GAME.players[0].weapon = params[:weapon].to_sym
+      @p1_weapon = params[:weapon].to_sym
+  end
+
+  def assign_weapon_to_player_two
+    GAME.players[1].weapon = params[:weapon].to_sym
+      @p2_weapon = params[:weapon].to_sym
+  end  
 
 end

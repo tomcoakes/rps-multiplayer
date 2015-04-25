@@ -8,11 +8,9 @@ class RPS < Sinatra::Base
 
   post '/singleplayer_game' do
     name = params[:name]
-    name.empty? ? erb :singleplayer_index
-      
-
-      
-    # else
+    if name.empty?
+      erb :singleplayer_index
+    else
       session[:game] = Game.new
       computer = Computer.new
       @player = Player.new(name)
@@ -20,7 +18,7 @@ class RPS < Sinatra::Base
       session[:game].add_player(@player)
       session[:me] = @player
       erb :singleplayer_game
-    # end
+    end
   end
 
   get '/singleplayer_outcome' do
